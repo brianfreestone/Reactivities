@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -21,7 +22,10 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Activity>>> GetActivities()
         {
-            return await _context.Activities.ToListAsync();
+            var activities = await _context.Activities.ToListAsync();
+            activities.OrderBy(x => x.Description);
+            
+            return activities;
         }
 
         [HttpGet("{id}")] // activities/
