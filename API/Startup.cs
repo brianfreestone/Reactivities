@@ -29,7 +29,10 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors(c =>
+            {
+            c.AddPolicy("CORSPolicy", options => options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());//.WithOrigins("http://localhost:3000"));
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -45,6 +48,8 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("CORSPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +60,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
 
             app.UseAuthorization();
 
