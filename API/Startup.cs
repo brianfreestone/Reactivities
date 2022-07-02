@@ -15,6 +15,9 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using MediatR;
 using Application.Activities;
+using AutoMapper;
+using Application.Core;
+using API.Extensions;
 
 namespace API
 {
@@ -31,22 +34,25 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddCors(c =>
             {
                 c.AddPolicy("CORSPolicy", options => options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());             //.WithOrigins("http://localhost:3000")); ; ; ;
             });
 
             services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddControllers();
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
             services.AddDbContext<DataContext>(options =>
-                {
-                    options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-                }
+            {
+                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
+            }
             );
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,7 +70,6 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
 
             app.UseAuthorization();
 
