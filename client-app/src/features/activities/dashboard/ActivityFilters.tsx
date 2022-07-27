@@ -3,6 +3,9 @@ import Calendar from "react-calendar";
 import { Header, Menu } from "semantic-ui-react";
 
 export default function ActivityFilters() {
+
+    const weekstart: number = 1;
+
     return (
         <>
             <Menu vertical size="large" style={{ width: '100%', marginTop: 25 }}>
@@ -12,7 +15,7 @@ export default function ActivityFilters() {
                 <Menu.Item content="I'm hosting" />
             </Menu>
             <Header />
-            <Calendar />
+            <Calendar locale="US" />
         </>
     )
 

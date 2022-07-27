@@ -11,6 +11,8 @@ export default function NavBar() {
                     Event Planner
                 </Menu.Item>
                 <Menu.Item as={NavLink} to='/activities' name='Events' />
+                <Menu.Item as={NavLink} to='/errors' name='Errors' />
+
                 <Menu.Item>
                     <Button as={NavLink} to='/createActivity' positive content='Create Event' />
                 </Menu.Item>
