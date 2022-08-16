@@ -1,14 +1,12 @@
-﻿using Application.Core;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Application.Core;
+//using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Activities
 {
@@ -16,7 +14,7 @@ namespace Application.Activities
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Activity? Activity { get; set; }
+            public Activity Activity { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>

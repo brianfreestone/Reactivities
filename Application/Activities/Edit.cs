@@ -1,23 +1,18 @@
-﻿using Application.Core;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Application.Core;
 using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace Application.Activities
 {
     public class Edit
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Activity? Acitivity { get; set; }
+            public Activity Acitivity { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>

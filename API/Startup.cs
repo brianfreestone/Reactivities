@@ -20,6 +20,8 @@ using Application.Core;
 using API.Extensions;
 using FluentValidation.AspNetCore;
 using API.Middleware;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace API
 {
@@ -35,36 +37,24 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddFluentValidation(config =>
+            services.AddControllers(options => 
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+                .AddFluentValidation(config =>
             {
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
             });
+
             services.AddApplicationServices(_config);
-
-            services.AddCors(c =>
-            {
-                c.AddPolicy("CORSPolicy", options => options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());             //.WithOrigins("http://localhost:3000")); ; ; ;
-            });
-
-            services.AddMediatR(typeof(List.Handler).Assembly);
-            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-            }
-            );
-
+            services.AddIdentityServices(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors("CORSPolicy");
+            app.UseCors("CorsPolicy");
 
             app.UseMiddleware<ExceptionMiddleware>();
 
@@ -78,6 +68,7 @@ namespace API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
