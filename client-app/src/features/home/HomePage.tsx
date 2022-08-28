@@ -6,6 +6,7 @@ import { useStore } from "../../app/stores/store";
 import LoginForm from "../users/LoginForm";
 import RegisterForm from "../users/RegisterForm";
 
+
 export default observer(function HomePage() {
     const { userStore, modalStore } = useStore();
 
@@ -30,6 +31,8 @@ export default observer(function HomePage() {
                         <Button onClick={() => modalStore.openModal(<RegisterForm />)} size="huge" inverted>
                             Register!
                         </Button>
+
+
                     </Fragment>
                 )}
             </Container>
