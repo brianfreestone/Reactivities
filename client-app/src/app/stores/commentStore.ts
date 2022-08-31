@@ -60,4 +60,13 @@ export default class CommentStore {
         }
     }
 
+    userIsTyping = async(values:any)=>{
+        values.activityId = store.activityStore.selectedActivity?.id;
+        try {
+            await this.hubConnection?.invoke('UserIsTyping', values);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 }

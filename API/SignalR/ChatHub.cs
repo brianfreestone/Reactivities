@@ -1,4 +1,5 @@
-﻿using Application.Comments;
+﻿using API.App_Code;
+using Application.Comments;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -21,6 +22,15 @@ namespace API.SignalR
 
             await Clients.Group(command.ActivityId.ToString())
                 .SendAsync("ReceiveComment", comment.Value);
+        }
+
+        public async Task UserIsTyping(Create.Command command)
+        {
+
+            var numUsersTyping = ++Global.NumUsers;
+
+            await Clients.Group(command.ActivityId.ToString())
+                .SendAsync("ReturnNumUsersTyping",numUsersTyping );
         }
 
         public override async Task OnConnectedAsync()
