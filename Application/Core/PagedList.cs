@@ -31,5 +31,6 @@ namespace Application.Core
 
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }
+
     }
 }
