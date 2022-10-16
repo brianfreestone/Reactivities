@@ -23,6 +23,7 @@ using API.Middleware;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using API.SignalR;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace API
 {
@@ -38,7 +39,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(options => 
+            services.AddControllers(options =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
@@ -58,6 +59,20 @@ namespace API
             app.UseCors("CorsPolicy");
 
             app.UseMiddleware<ExceptionMiddleware>();
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(options => options.NoReferrer());
+            app.UseXXssProtection(options => options.EnabledWithBlockMode());
+            app.UseXfo(options => options.Deny());
+
+            app.UseCspReportOnly(options => options
+                .BlockAllMixedContent()
+                .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com"))
+                .FontSources(s=>s.Self())
+                .FormActions(s=>s.Self())
+                .FrameAncestors(s=>s.Self())
+                .ImageSources(s=>s.Self())
+                .ScriptSources(s=>s.Self())
+                );
 
             if (env.IsDevelopment())
             {
