@@ -35,7 +35,7 @@ namespace Application.Profiles
 
             public async Task<Result<List<UserActivityDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.ActivityAtendees
+                var query = _context.ActivityAttendees
                     .Where(u => u.AppUser.UserName == request.Username)
                     .OrderBy(a=> a.Activity.Date)
                     .ProjectTo<UserActivityDto>(_mapper.ConfigurationProvider)
